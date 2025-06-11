@@ -51,6 +51,7 @@ RUN apt-get update && \
     libdrm2 \
     xdg-utils \
     xvfb \
+    tini \
     && rm -rf /var/lib/apt/lists/*
 
 # retrieve packages from build stage
@@ -62,6 +63,9 @@ COPY src src
 
 # Expose the port for the FastAPI server
 EXPOSE 8000
+
+# Setup tini as entrypoint so zombie processes are cleared
+ENTRYPOINT ["/usr/bin/tini", "--"]
 
 # Default command
 CMD ["python", "src/server.py"]
